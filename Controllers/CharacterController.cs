@@ -24,5 +24,10 @@ namespace dotnet_rpg.Controllers
         public ActionResult<Character> GetSingle(int Id){
             return Ok(characters.FirstOrDefault(x=>x.Id==Id));
         }
+        [HttpPost("api/addCharacter")]
+        public ActionResult<Character> AddCharacter(Character model){
+            characters.Add(model);
+            return Ok(characters);
+        }
     }
 }
