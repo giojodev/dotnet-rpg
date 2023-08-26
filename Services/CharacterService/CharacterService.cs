@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Microsoft.AspNetCore.Mvc.ViewComponents;
 
 namespace dotnet_rpg.Services.CharacterService
 {
@@ -26,6 +26,37 @@ namespace dotnet_rpg.Services.CharacterService
             characters.Add(_mapper.Map<Character>(character));
             serviceResponse.Data = characters.Select(c => _mapper.Map<GetCharacterDTO>(c)).ToList();
             return serviceResponse;
+        }
+        public async Task<ServiceResponse<GetCharacterDTO>> UpdateCharacter(UpdateCharacterDTO updatedCharacter)
+        {
+            var serviceResponse=new ServiceResponse<GetCharacterDTO>();
+            var character= characters.FirstOrDefault(x=>x.Id==updatedCharacter.Id);
+            try 
+            {
+                if(character is null)
+                    throw new Exception($"No fue encontrado un registro con el Id {updatedCharacter.Id}.");
+
+                character.Name=updatedCharacter.Name;
+                character.strength=updatedCharacter.strength;
+                character.defense=updatedCharacter.defense;
+                character.intelligence=updatedCharacter.intelligence;
+                character.Class=updatedCharacter.Class;
+                character.hitPoints=updatedCharacter.hitPoints;
+                
+                serviceResponse.Data=_mapper.Map<GetCharacterDTO>(character);
+                        
+            }
+            catch(Exception ex)
+            {
+                serviceResponse.Success=false;
+                serviceResponse.Message=$"{ex.Message}";
+            }
+            
+           
+            
+            return serviceResponse; 
+
+            
         }
 
         public async Task<ServiceResponse<List<GetCharacterDTO>>> GetAllCharacter()
