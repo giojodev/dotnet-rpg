@@ -35,6 +35,10 @@ namespace dotnet_rpg.Services.CharacterService
             {
                 if(character is null)
                     throw new Exception($"No fue encontrado un registro con el Id {updatedCharacter.Id}.");
+                
+                //Las siguientes opciones son viables si se desea utilizar el mapper para realizar actualizacion de los datos.
+                // _mapper.Map<Character>(updatedCharacter);
+                // _mapper.Map(updatedCharacter,character);
 
                 character.Name=updatedCharacter.Name;
                 character.strength=updatedCharacter.strength;
