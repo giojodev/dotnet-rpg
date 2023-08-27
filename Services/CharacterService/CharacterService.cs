@@ -69,7 +69,36 @@ namespace dotnet_rpg.Services.CharacterService
             serviceResponse.Data=characters.Select(x => _mapper.Map<GetCharacterDTO>(x)).ToList();
             return serviceResponse;
         }
+        public async Task<ServiceResponse<List<GetCharacterDTO>>> DeleteCharacter(int Id)
+        {
+            var serviceResponse=new ServiceResponse<List<GetCharacterDTO>>();
+            var character= characters.First(x=>x.Id==Id);
+            try 
+            {
+                if(character is null)
+                    throw new Exception($"No fue encontrado un registro con el Id {Id}.");
+                
+                //Las siguientes opciones son viables si se desea utilizar el mapper para realizar actualizacion de los datos.
+                // _mapper.Map<Character>(updatedCharacter);
+                // _mapper.Map(updatedCharacter,character);
 
+                characters.Remove(character);
+                
+                serviceResponse.Data = characters.Select(x => _mapper.Map<GetCharacterDTO>(x)).ToList();
+                        
+            }
+            catch(Exception ex)
+            {
+                serviceResponse.Success=false;
+                serviceResponse.Message=$"{ex.Message}";
+            }
+            
+           
+            
+            return serviceResponse; 
+
+            
+        }
         public async Task<ServiceResponse<GetCharacterDTO>> GetCharacterById(int Id)
         {
             var serviceResponse=new ServiceResponse<GetCharacterDTO>();
